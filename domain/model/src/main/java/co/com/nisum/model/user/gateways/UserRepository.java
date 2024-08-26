@@ -4,8 +4,11 @@ import co.com.nisum.model.user.User;
 import co.com.nisum.model.user.UserResponse;
 import reactor.core.publisher.Mono;
 
-@FunctionalInterface
+import java.util.UUID;
+
 public interface UserRepository {
 
-    Mono<UserResponse> save(User user);
+    Mono<UserResponse> save(User user, String token);
+
+    Mono<UUID> findUserIdByEmail(String email);
 }
