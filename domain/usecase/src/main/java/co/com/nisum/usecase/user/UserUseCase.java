@@ -8,9 +8,6 @@ import co.com.nisum.model.user.gateways.UserToken;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
-import java.util.Objects;
-import java.util.UUID;
-
 @RequiredArgsConstructor
 public class UserUseCase {
 
@@ -19,13 +16,14 @@ public class UserUseCase {
 
     public Mono<UserResponse> save(User user) {
         return userRepository.findUserIdByEmail(user.getEmail())
-                .doOnNext(userId -> this.validateEmptyUserId(userId, user))
-                .flatMap(userId -> userToken.createToken())
+                .hasElement().switchIfEmpty(Mono.just(Boolean.FALSE))
+                .doOnNext(hasEmail -> validateEmptyUserId(hasEmail, user))
+                .flatMap(hasEmail -> userToken.createToken())
                 .flatMap(token -> userRepository.save(user, token));
     }
 
-    private void validateEmptyUserId(UUID userId, User user) {
-        if(Objects.nonNull(userId)) {
+    private void validateEmptyUserId(boolean hasEmail, User user) {
+        if (hasEmail) {
             var msg = "El correo %s ya se encuentra registrado";
             throw new BusinessException(String.format(msg, user.getEmail()));
         }
