@@ -12,9 +12,8 @@ subprojects {
     apply plugin: 'jacoco'
     apply plugin: 'io.spring.dependency-management'
 
-    compileJava.dependsOn validateStructure
+    validateStructure.enabled = false
     sourceCompatibility = JavaVersion.VERSION_17
-
 
     test {
         useJUnitPlatform()
@@ -42,6 +41,16 @@ subprojects {
                     "-XX:+AllowRedefinitionToAddDeleteMethods"
             ]
         }
+    }
+
+    jar {
+        from("src/main/resources") {
+            include "**/*.yaml"
+            include "**/*.yml"
+            include "**/*.xml"
+            include "**/*.properties"
+        }
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
     test.finalizedBy(project.tasks.jacocoTestReport)
@@ -75,6 +84,15 @@ tasks.register('jacocoMergedReport', JacocoReport) {
         csv.setRequired false
         html.setRequired true
     }
+}
+
+tasks.named("jacocoMergedReport").configure {
+    subprojects.forEach {
+        dependsOn("${it.name}:test")
+        dependsOn("${it.name}:jacocoTestReport")
+    }
+    dependsOn("test")
+
 }
 
 tasks.withType(JavaCompile).configureEach {

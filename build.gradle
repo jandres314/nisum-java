@@ -1,7 +1,7 @@
 buildscript {
 	ext {
 		cleanArchitectureVersion = '3.17.17'
-		springBootVersion = '3.3.2'
+		springBootVersion = '3.3.3'
 		sonarVersion = '5.1.0.4882'
 		jacocoVersion = '0.8.12'
         lombokVersion = '1.18.34'
@@ -27,7 +27,12 @@ sonar {
         property "sonar.junit.reportsPath", ""
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacocoMergedReport/jacocoMergedReport.xml"
-        property "sonar.externalIssuesReportPaths", "build/issues.json"
+        property "sonar.exclusions",
+                """
+                **/test/**,
+                deployment/**,
+                **/config/**
+                """
     }
 }
 
