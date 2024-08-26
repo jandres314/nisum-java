@@ -1,4 +1,4 @@
-package co.com.nisum.config.database;
+package co.com.nisum.r2dbch2.config;
 
 import io.r2dbc.spi.ConnectionFactory;
 import org.springframework.context.annotation.Bean;
