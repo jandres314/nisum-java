@@ -28,5 +28,3 @@ management:
       exposure:
         include: health
       base-path: /actuator
-cors:
-  allowed-origins: "http://localhost:8080"
