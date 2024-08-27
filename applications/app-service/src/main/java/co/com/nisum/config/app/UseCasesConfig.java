@@ -10,7 +10,6 @@ import reactor.core.publisher.Mono;
 import java.util.UUID;
 
 @Configuration
-@ComponentScan
 public class UseCasesConfig {
 
     @Bean
