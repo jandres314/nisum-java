@@ -1,9 +1,8 @@
 package co.com.nisum.api;
 
 import co.com.nisum.api.handler.NisumApiHandler;
-import co.com.nisum.api.model.UserViewRequest;
-import co.com.nisum.api.model.UserViewResponse;
-import co.com.nisum.model.user.UserResponse;
+import co.com.nisum.api.model.UserRequestView;
+import co.com.nisum.api.model.UserResponseView;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,7 @@ public class NisumApiRest {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<UserViewResponse> saveEvent(@RequestBody @Valid UserViewRequest body) {
+    public Mono<UserResponseView> saveEvent(@RequestBody @Valid UserRequestView body) {
         var init = Instant.now();
         return nisumApiHandler.save(body)
                 .doFirst(() -> log.info("body: {}", body))
