@@ -8,5 +8,6 @@ create table users
     modified timestamp,
     lastlogin timestamp,
     token varchar(4000),
-    active BOOLEAN
+    active BOOLEAN,
+    phones VARCHAR(500) ARRAY
 );
