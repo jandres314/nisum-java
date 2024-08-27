@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import org.springframework.web.server.UnsupportedMediaTypeStatusException;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -31,6 +33,8 @@ public class GlobalErrorHandler {
 
     private static final String APP_NAME = "app-nissum-solucion-java";
     private final ObjectMapper mapper;
+    @Value("${spring.application.name}")
+    private String applicationName;
 
     @ExceptionHandler(BusinessException.class)
     public Mono<Void> handleBussinesException(BusinessException ex, ServerWebExchange exchange)
@@ -53,7 +57,7 @@ public class GlobalErrorHandler {
         });
         logException(correlationId, errors.toString());
         var dataBuffer = getDataBuffer
-                (correlationId, "Error en los datos de entrada", exchange, HttpStatus.BAD_REQUEST);
+                (correlationId, errors.toString(), exchange, HttpStatus.BAD_REQUEST);
         return exchange.getResponse().writeWith(Mono.just(dataBuffer));
     }
 
@@ -113,8 +117,8 @@ public class GlobalErrorHandler {
         Map<String, String> response = new HashMap<>();
         response.put("correlationId", correlationId);
         response.put("mensaje", message);
-        response.put("requestDateTime", LocalDateTime.now().toString());
-        response.put("applicationName", APP_NAME);
+        response.put("requestDateTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        response.put("applicationName", applicationName);
         return response;
     }
 

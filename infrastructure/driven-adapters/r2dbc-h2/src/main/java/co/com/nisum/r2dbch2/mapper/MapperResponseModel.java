@@ -13,6 +13,11 @@ public class MapperResponseModel implements Function<UserEntity, UserResponse> {
     public UserResponse apply(UserEntity userEntity) {
         return UserResponse.builder()
                 .userId(userEntity.getId())
+                .createdAt(userEntity.getCreated())
+                .modifiedAt(userEntity.getModified())
+                .lastLoginAt(userEntity.getLastlogin())
+                .token(userEntity.getToken())
+                .isActive(userEntity.getActive())
                 .build();
     }
 

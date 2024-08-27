@@ -32,6 +32,6 @@ public class UserRequestView {
     private String password;
 
     @Valid
-    @Size(min = 1)
+    @Size(min = 1, max = 50)
     private List<UserPhoneView> phones;
 }
