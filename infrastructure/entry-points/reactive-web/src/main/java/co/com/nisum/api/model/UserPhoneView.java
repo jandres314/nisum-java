@@ -1,5 +1,6 @@
 package co.com.nisum.api.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.validation.constraints.NotEmpty;
@@ -26,6 +27,6 @@ public class UserPhoneView {
 
     @Pattern(regexp = "^\\d{1,5}$")
     @NotEmpty
-    @JsonProperty("countrycode")
+    @JsonAlias({ "countrycode", "contrycode" })
     private String countryCode;
 }

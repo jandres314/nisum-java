@@ -112,7 +112,7 @@ public class GlobalErrorHandler {
     private Map<String, String> getErrorResponse(String correlationId, String message) {
         Map<String, String> response = new HashMap<>();
         response.put("correlationId", correlationId);
-        response.put("message", message);
+        response.put("mensaje", message);
         response.put("requestDateTime", LocalDateTime.now().toString());
         response.put("applicationName", APP_NAME);
         return response;

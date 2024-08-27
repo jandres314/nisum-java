@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.function.Function;
 
 @Component
-public class MapperResponse implements Function<UserEntity, UserResponse> {
+public class MapperResponseModel implements Function<UserEntity, UserResponse> {
 
     @Override
     public UserResponse apply(UserEntity userEntity) {

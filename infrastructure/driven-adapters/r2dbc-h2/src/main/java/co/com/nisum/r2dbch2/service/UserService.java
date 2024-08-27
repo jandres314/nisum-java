@@ -4,7 +4,7 @@ import co.com.nisum.model.user.User;
 import co.com.nisum.model.user.UserResponse;
 import co.com.nisum.model.user.gateways.UserRepository;
 import co.com.nisum.r2dbch2.mapper.MapperEntity;
-import co.com.nisum.r2dbch2.mapper.MapperResponse;
+import co.com.nisum.r2dbch2.mapper.MapperResponseModel;
 import co.com.nisum.r2dbch2.repository.UserH2Repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,12 +18,12 @@ public class UserService implements UserRepository {
 
     private final UserH2Repository userH2Repository;
     private final MapperEntity mapperEntity;
-    private final MapperResponse mapperResponse;
+    private final MapperResponseModel mapperResponseModel;
 
     @Override
     public Mono<UserResponse> save(User user, String token) {
         return userH2Repository.save(mapperEntity.apply(user, token))
-                .map(mapperResponse);
+                .map(mapperResponseModel);
     }
 
     @Override
