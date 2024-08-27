@@ -1,4 +1,4 @@
-package co.com.nisum.config.app;
+package co.com.nisum.config;
 
 import co.com.nisum.api.consumer.PasswordConsumer;
 import org.springframework.beans.factory.annotation.Value;

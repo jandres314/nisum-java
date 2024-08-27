@@ -1,4 +1,4 @@
-package co.com.nisum.config.app;
+package co.com.nisum.config;
 
 import co.com.nisum.model.user.gateways.UserRepository;
 import co.com.nisum.usecase.user.UserUseCase;
