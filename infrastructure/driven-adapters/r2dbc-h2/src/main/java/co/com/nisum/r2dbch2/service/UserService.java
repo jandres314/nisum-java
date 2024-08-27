@@ -3,16 +3,27 @@ package co.com.nisum.r2dbch2.service;
 import co.com.nisum.model.user.User;
 import co.com.nisum.model.user.UserResponse;
 import co.com.nisum.model.user.gateways.UserRepository;
+import co.com.nisum.r2dbch2.mapper.MapperEntity;
+import co.com.nisum.r2dbch2.mapper.MapperResponse;
+import co.com.nisum.r2dbch2.repository.UserH2Repository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class UserService implements UserRepository {
+
+    private final UserH2Repository userH2Repository;
+    private final MapperEntity mapperEntity;
+    private final MapperResponse mapperResponse;
+
     @Override
     public Mono<UserResponse> save(User user, String token) {
-        return Mono.just(new UserResponse());
+        return userH2Repository.save(mapperEntity.apply(user, token))
+                .map(mapperResponse);
     }
 
     @Override
