@@ -3,6 +3,7 @@ package co.com.nisum.r2dbch2.service;
 import co.com.nisum.model.user.User;
 import co.com.nisum.model.user.UserResponse;
 import co.com.nisum.model.user.gateways.UserRepository;
+import co.com.nisum.r2dbch2.entity.UserEntity;
 import co.com.nisum.r2dbch2.mapper.MapperEntity;
 import co.com.nisum.r2dbch2.mapper.MapperResponseModel;
 import co.com.nisum.r2dbch2.repository.UserH2Repository;
@@ -28,6 +29,8 @@ public class UserService implements UserRepository {
 
     @Override
     public Mono<UUID> findUserIdByEmail(String email) {
-        return Mono.empty();
+        return userH2Repository.findUserEntityByEmail(email)
+                .map(UserEntity::getId);
     }
+
 }
