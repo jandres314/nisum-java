@@ -2,7 +2,7 @@ server:
   port: 8080
 spring:
   application:
-    name: "EjercicioJava"
+    name: "app-nissum-solucion-java"
   devtools:
     add-properties: false
   r2dbc:
