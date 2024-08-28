@@ -29,7 +29,7 @@ management:
         include: health
       base-path: /actuator
 app:
-  passwordRegex: ^\\w{5,50}$
+  passwordRegex: ^\w{5,50}$
   token:
     secretKey: secretKeyJwt
     keyId: nisum_apps
