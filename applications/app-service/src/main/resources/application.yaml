@@ -30,3 +30,8 @@ management:
       base-path: /actuator
 app:
   passwordRegex: ^\\w{5,50}$
+  token:
+    secretKey: secretKeyJwt
+    keyId: nisum_apps
+    subject: jwt_nissum_subject
+    issuer: auth0

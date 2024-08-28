@@ -16,3 +16,5 @@ include ':r2dbc-h2'
 project(':r2dbc-h2').projectDir = file('./infrastructure/driven-adapters/r2dbc-h2')
 include ':reactive-web'
 project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')
+include ':jwt-generation'
+project(':jwt-generation').projectDir = file('./infrastructure/driven-adapters/jwt-generation')
