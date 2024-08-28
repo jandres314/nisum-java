@@ -4,7 +4,7 @@ import co.com.nisum.model.user.User;
 import co.com.nisum.model.user.UserResponse;
 import co.com.nisum.model.user.exceptions.BusinessException;
 import co.com.nisum.model.user.gateways.UserRepository;
-import co.com.nisum.model.user.gateways.UserToken;
+import co.com.nisum.usecase.token.TokenUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -12,13 +12,13 @@ import reactor.core.publisher.Mono;
 public class UserUseCase {
 
     private final UserRepository userRepository;
-    private final UserToken userToken;
+    private final TokenUseCase tokenUseCase;
 
     public Mono<UserResponse> save(User user) {
         return userRepository.findUserIdByEmail(user.getEmail())
                 .hasElement().switchIfEmpty(Mono.just(Boolean.FALSE))
                 .doOnNext(hasEmail -> validateEmptyUserId(hasEmail, user))
-                .flatMap(hasEmail -> userToken.createToken())
+                .flatMap(hasEmail -> tokenUseCase.createToken())
                 .flatMap(token -> userRepository.save(user, token));
     }
 

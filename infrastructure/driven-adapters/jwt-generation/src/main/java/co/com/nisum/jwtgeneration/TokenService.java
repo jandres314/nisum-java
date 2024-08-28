@@ -1,42 +1,29 @@
 package co.com.nisum.jwtgeneration;
 
-import co.com.nisum.model.user.gateways.UserToken;
+import co.com.nisum.model.token.Token;
+import co.com.nisum.model.token.gateways.TokenRepository;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 import java.util.UUID;
 
-@Service
-public class TokenService implements UserToken {
+@RequiredArgsConstructor
+public class TokenService implements TokenRepository {
 
-    @Value("${app.token.secretKey}")
-    private String secretKeyToken;
-
-    @Value("${app.token.keyId}")
-    private String keyIdToken;
-
-    @Value("${app.token.subject}")
-    private String subjectToken;
-
-    @Value("${app.token.issuer}")
-    private String issuerToken;
-
-    @Value("${app.token.secondsToExpiration}")
-    private Integer secondsToExpiration;
+    private final Token tokenParameters;
 
     @Override
     public Mono<String> createToken() {
-        var algorithm = Algorithm.HMAC512(secretKeyToken);
+        var algorithm = Algorithm.HMAC512(tokenParameters.getSecretKey());
         var token = JWT.create()
-                .withIssuer(issuerToken)
-                .withExpiresAt(Instant.now().plusSeconds(secondsToExpiration))
-                .withKeyId(keyIdToken)
+                .withIssuer(tokenParameters.getIssuer())
+                .withExpiresAt(Instant.now().plusSeconds(tokenParameters.getSecondsToExpiration()))
+                .withKeyId(tokenParameters.getKeyId())
                 .withJWTId(UUID.randomUUID().toString())
-                .withSubject(subjectToken)
+                .withSubject(tokenParameters.getSubject())
                 .sign(algorithm);
         return Mono.just(token);
     }

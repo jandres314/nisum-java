@@ -1,12 +1,12 @@
 package co.com.nisum.usecase.user;
-import static org.mockito.Mockito.*;
 
 import co.com.nisum.model.user.User;
 import co.com.nisum.model.user.UserPhone;
 import co.com.nisum.model.user.UserResponse;
 import co.com.nisum.model.user.exceptions.BusinessException;
 import co.com.nisum.model.user.gateways.UserRepository;
-import co.com.nisum.model.user.gateways.UserToken;
+import co.com.nisum.usecase.token.TokenUseCase;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +19,8 @@ import reactor.test.StepVerifier;
 import java.util.List;
 import java.util.UUID;
 
+import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 class UserUseCaseTest {
 
@@ -29,7 +31,12 @@ class UserUseCaseTest {
     private UserRepository userRepository;
 
     @Mock
-    private UserToken userToken;
+    private TokenUseCase tokenUseCase;
+
+    @AfterEach
+    void tearDown() {
+        verify(userRepository).findUserIdByEmail(anyString());
+    }
 
     @Test
     void saveUserWithExistingEmail() {
@@ -37,21 +44,19 @@ class UserUseCaseTest {
                 .thenReturn(Mono.just(UUID.randomUUID()));
         var mono = userUseCase.save(getUser());
         StepVerifier.create(mono).expectError(BusinessException.class).verify();
-        verify(userRepository).findUserIdByEmail(anyString());
     }
 
     @Test
     void saveUserSuccess() {
         when(userRepository.findUserIdByEmail(anyString()))
                 .thenReturn(Mono.empty());
-        when(userToken.createToken())
+        when(tokenUseCase.createToken())
                 .thenReturn(Mono.just(UUID.randomUUID().toString()));
         when(userRepository.save(any(User.class), anyString()))
                 .thenReturn(Mono.just(new UserResponse()));
         var mono = userUseCase.save(getUser());
         StepVerifier.create(mono).assertNext(Assertions::assertNotNull).verifyComplete();
-        verify(userRepository).findUserIdByEmail(anyString());
-        verify(userToken).createToken();
+        verify(tokenUseCase).createToken();
         verify(userRepository).save(any(User.class), anyString());
     }
 
