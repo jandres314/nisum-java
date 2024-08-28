@@ -6,11 +6,9 @@ import co.com.nisum.r2dbch2.entity.UserEntity;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.h2.util.json.JSONArray;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.function.BiFunction;
 
 @Component
@@ -36,8 +34,7 @@ public class MapperEntity implements BiFunction<User, String, UserEntity> {
     }
 
     private String toJson(UserPhone userPhone) {
-        var json = objectMapper.convertValue(userPhone, JsonNode.class).toString();
-        return json;
+        return objectMapper.convertValue(userPhone, JsonNode.class).toString();
     }
 
 }
