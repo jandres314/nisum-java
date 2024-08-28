@@ -23,7 +23,7 @@ public class NisumApiRest {
 
     private final NisumApiHandler nisumApiHandler;
 
-    @PostMapping(value = "/save")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<UserResponseView> saveUser(@RequestBody @Valid UserRequestView body) {
         var init = Instant.now();
