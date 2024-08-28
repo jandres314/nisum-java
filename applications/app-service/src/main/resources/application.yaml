@@ -35,3 +35,4 @@ app:
     keyId: nisum_apps
     subject: jwt_nissum_subject
     issuer: auth0
+    secondsToExpiration: 900

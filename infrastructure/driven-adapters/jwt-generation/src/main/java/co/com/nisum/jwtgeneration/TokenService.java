@@ -25,12 +25,15 @@ public class TokenService implements UserToken {
     @Value("${app.token.issuer}")
     private String issuerToken;
 
+    @Value("${app.token.secondsToExpiration}")
+    private Integer secondsToExpiration;
+
     @Override
     public Mono<String> createToken() {
         var algorithm = Algorithm.HMAC512(secretKeyToken);
         var token = JWT.create()
                 .withIssuer(issuerToken)
-                .withExpiresAt(Instant.now().plusSeconds(900))
+                .withExpiresAt(Instant.now().plusSeconds(secondsToExpiration))
                 .withKeyId(keyIdToken)
                 .withJWTId(UUID.randomUUID().toString())
                 .withSubject(subjectToken)
