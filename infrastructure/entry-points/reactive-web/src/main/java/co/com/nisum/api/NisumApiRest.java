@@ -23,9 +23,9 @@ public class NisumApiRest {
 
     private final NisumApiHandler nisumApiHandler;
 
-    @PostMapping
+    @PostMapping(value = "/save")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<UserResponseView> saveEvent(@RequestBody @Valid UserRequestView body) {
+    public Mono<UserResponseView> saveUser(@RequestBody @Valid UserRequestView body) {
         var init = Instant.now();
         return nisumApiHandler.save(body)
                 .doFirst(() -> log.info("body: {}", body))
