@@ -1,0 +1,63 @@
+{
+	"info": {
+		"_postman_id": "d01c1e65-71e8-496f-bc73-a216c27d8371",
+		"name": "ns",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28865935"
+	},
+	"item": [
+		{
+			"name": "/health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/users/actuator/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"actuator",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/save-user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Jaime Osorio\",\r\n    \"email\": \"jandres317@bancobci.cl\",\r\n    \"password\": \"changeme\",\r\n    \"phones\": [\r\n        {\r\n            \"number\": \"1234567\",\r\n            \"citycode\": \"1\",\r\n            \"countrycode\": \"57\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
