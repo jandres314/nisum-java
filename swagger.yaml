@@ -1,0 +1,180 @@
+openapi: 3.0.1
+info:
+  title: Creación de usuarios
+  description: API para crear usuarios y asignarles un token de autenticación.
+  contact:
+    email: jandres314@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 2.0.0
+paths:
+  /api/v1/users:
+    post:
+      tags:
+        - Guardar usuario
+      requestBody:
+        description: Almacenamiento de un usuario
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/request'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseError'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseError'
+        '415':
+          description: Unsupported Medya Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseError'
+components:
+  schemas:
+    request:
+      type: object
+      description: Objeto request con la informacion del usuario a crear
+      properties:
+        name:
+          maxLength: 100
+          pattern: ^[A-Za-z ]+$
+          type: string
+          description: Nombre del usuario a crear
+          example: Juan Rodriguez
+        email:
+          maxLength: 100
+          pattern: ^[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.cl$
+          type: string
+          description: Email del usuario a crear
+          example: juan@rodriguez.cl
+        password:
+          maxLength: 50
+          pattern: ^\w{5,50}$
+          type: string
+          description: Contraseña del usuario a crear. La expresión regular de este campo se encuentra exteriozada desde una variable de entorno en la apliación y se puede actualizar en cualquier momento
+          example: changeme
+        phones:
+          type: array
+          description: listado de telefonos del usuario a crear
+          minItems: 1
+          maxItems: 50
+          items:
+            type: object
+            properties:
+              number:
+                type: string
+                pattern: ^\d{7,10}$
+                description: Numero de telefono. (entre 7 y 10 digitos)
+                example: 2342466
+              citycode:
+                maxLength: 100
+                type: string
+                pattern: ^\d{1,5}$
+                description: Codigo de ciudad. (entre 1 y 5 digitos)
+                example: 1
+              countrycode:
+                maxLength: 100
+                type: string
+                pattern: ^\d{1,5}$
+                description: Codigo de pais. (entre 1 y 5 digitos)
+                example: 57
+            required:
+              - number
+              - citycode
+              - countrycode
+      required:
+        - name
+        - email
+        - password
+        - phones
+    response:
+      required:
+        - id
+        - created
+        - modified
+        - last_login
+        - token
+        - isactive
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: identificador en base de datos el usuario creado
+          example: 4bff1be3-12be-41fa-80c1-b13f4c077656
+        created:
+          type: string
+          format: date-time
+          description: fecha y hora de creacion del usuario
+          example: 2024-08-28 19:07:26
+        modified:
+          type: string
+          format: date-time
+          description: fecha y hora de la ultima modificacion del usuario
+          example: 2024-08-28 19:07:26
+        last_login:
+          type: string
+          format: date-time
+          description: fecha y hora del ultimo login del usuario
+          example: 2024-08-28 19:07:26
+        token:
+          type: string
+          description: token JWT de autenticacion para el usuario
+          example: eyJraWQiOiJuaXN1bV9hcHBzIiwiYWxnIjoiSFM1MTIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTcyNDg5MDk0NiwianRpIjoiNzA3MDAyOWItYTE3OS00MTMxLTk2OWItZmViYjBmZWI5ZmM3Iiwic3ViIjoiand0X25pc3N1bV9zdWJqZWN0In0.LZF_W0HpoNxtM04P6CLopyLfwBVX0AAQiGZAkDS3kuovXtT9E070lXJ2yxhmZGFMTnJyR0s5FaaumsnVGI43kw
+        isactive:
+          type: boolean
+          description: indica si el usuario esta activo
+          example: true
+    responseError:
+      required:
+        - requestDateTime
+        - correlationId
+        - mensaje
+        - applicationName
+      type: object
+      properties:
+        requestDateTime:
+          type: string
+          format: date-time
+          description: fecha y hora de la respuesta
+          example: 2024-08-28 19:07:26
+        correlationId:
+          type: string
+          format: uuid
+          description: identificador de correlación para los logs de la petición
+          example: 4bff1be3-12be-41fa-80c1-b13f4c077656
+        mensaje:
+          type: string
+          description: mensaje con la descripcion del error
+        applicationName:
+          type: string
+          description: nombre de la aplicacion que presento el error
+          example: app-nissum-solucion-java
